@@ -59,7 +59,7 @@ const setURL = (setswURL, URL) => {
 };
 
 function App() {
-  const [swCharacterInfo, setswCharacterInfo] = useState({});
+  const [characters, setCharacters] = useState({});
   const [swCharacterCount, setswCharacterCount] = useState(0);
   const [swURL, setswURL] = useState('https://swapi.dev/api/people/');
 
@@ -69,7 +69,7 @@ function App() {
       const { characterCount, characterInfo } = responseData;
       await setHomeWorld(characterInfo);
       await setSpecies(characterInfo);
-      setswCharacterInfo(characterInfo);
+      setCharacters(characterInfo);
       setswCharacterCount(characterCount);
     };
     fetchData();
@@ -93,7 +93,7 @@ function App() {
 
           <div className="row">
             <div className="col-12">
-              <Table swCharacterInfo={swCharacterInfo} />
+              <Table characters={characters} />
             </div>
           </div>
 
