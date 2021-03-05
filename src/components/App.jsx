@@ -60,7 +60,7 @@ const setURL = (setswURL, URL) => {
 
 function App() {
   const [characters, setCharacters] = useState({});
-  const [swCharacterCount, setswCharacterCount] = useState(0);
+  const [characterCount, setCharacterCount] = useState(0);
   const [swURL, setswURL] = useState('https://swapi.dev/api/people/');
 
   useEffect(() => {
@@ -70,7 +70,7 @@ function App() {
       await setHomeWorld(characterInfo);
       await setSpecies(characterInfo);
       setCharacters(characterInfo);
-      setswCharacterCount(characterCount);
+      setCharacterCount(characterCount);
     };
     fetchData();
   }, [swURL]);
@@ -100,7 +100,7 @@ function App() {
           <div className="row">
             <div className="col-12">
               <Pagination
-                swCharacterCount={swCharacterCount}
+                characterCount={characterCount}
                 swURL={swURL}
                 setswURL={setswURL}
                 setAPI={setURL}
