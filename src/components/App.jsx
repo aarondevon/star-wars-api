@@ -21,37 +21,17 @@ const getCharacterInfo = async (swURL) => {
   };
 };
 
-const getHomeworld = async (worldURL) => {
-  const world = await axios.get(httpToHttps(worldURL));
-  return world.data.name;
+const getHomeworld = async (homeworldURL) => {
+  const homeworld = await axios.get(httpToHttps(homeworldURL));
+  return homeworld.data.name;
 };
 
-const setHomeWorld = async (characters) => {
-  const promises = characters.map((character) => {
-    return getHomeworld(character.homeworld).then((world) => {
-      character.homeworld = world;
-    });
-  });
-
-  await Promise.all(promises);
-};
-
-const getSpecies = async (speciesAPI) => {
-  const species = await axios.get(httpToHttps(speciesAPI));
+const getSpecies = async (speciesURL) => {
+  if (speciesURL.length === 0) {
+    return 'Human';
+  }
+  const species = await axios.get(httpToHttps(speciesURL[0]));
   return species.data.name;
-};
-
-const setSpecies = async (characters) => {
-  const promises = characters.map((character) => {
-    if (character.species.length === 0) {
-      character.species = 'Human';
-      return character.species;
-    }
-    return getSpecies(character.species[0]).then((species) => {
-      character.species = species;
-    });
-  });
-  await Promise.all(promises);
 };
 
 const setURL = (setswURL, URL) => {
@@ -61,10 +41,15 @@ const setURL = (setswURL, URL) => {
 const getCharacters = async (setCharacters, setCharacterCount, swURL) => {
   const responseData = await getCharacterInfo(swURL);
   const { characterCount, characterInfo } = responseData;
-  await setHomeWorld(characterInfo);
-  await setSpecies(characterInfo);
-  setCharacters(characterInfo);
-  setCharacterCount(characterCount);
+  console.log(characterCount);
+  const characters = characterInfo.map(async (character) => {
+    character.homeworld = await getHomeworld(character.homeworld);
+    character.species = await getSpecies(character.species);
+    return character;
+  });
+  console.log(characters);
+  // setCharacters(characters);
+  // setCharacterCount(characterCount);
 };
 
 function App() {
