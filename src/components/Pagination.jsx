@@ -28,7 +28,7 @@ function getNumberOfButtons(props) {
   return Math.ceil(props.characterCount / 10);
 }
 
-function createButton(props) {
+function createButtons(props) {
   const buttonArr = [];
   let buttonCount = 1;
   const numberOfButtons = getNumberOfButtons(props);
@@ -51,7 +51,7 @@ function createButton(props) {
 function Pagination(props) {
   return (
     <div id="pagination-container" className="row">
-      {createButton(props)}
+      {createButtons(props)}
     </div>
   );
 }
