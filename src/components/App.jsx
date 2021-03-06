@@ -38,13 +38,20 @@ const getCharacters = async (setCharacters, setCharacterCount, url) => {
   const responseData = await getCharacterInfo(url);
   const { characterCount, characterInfo } = responseData;
 
-  const characters = await Promise.all(characterInfo.map(async (character) => {
-    character.homeworld = await getHomeworld(character.homeworld);
-    character.species = await getSpecies(character.species);
-    return character;
-  }));
+  const characters = characterInfo.map(async (character) => {
+    const promises = [getHomeworld(character.homeworld), getSpecies(character.species)];
 
-  setCharacters(characters);
+    const [homeWorldName, speciesName] = await Promise.all(promises);
+    character.homeworld = homeWorldName;
+    character.species = speciesName;
+
+    return character;
+  });
+
+  Promise.all(characters).then((characterArray) => {
+    setCharacters(characterArray);
+  });
+
   setCharacterCount(characterCount);
 };
 
