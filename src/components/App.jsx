@@ -41,15 +41,15 @@ const setURL = (setswURL, URL) => {
 const getCharacters = async (setCharacters, setCharacterCount, swURL) => {
   const responseData = await getCharacterInfo(swURL);
   const { characterCount, characterInfo } = responseData;
-  console.log(characterCount);
-  const characters = characterInfo.map(async (character) => {
+
+  const characters = await Promise.all(characterInfo.map(async (character) => {
     character.homeworld = await getHomeworld(character.homeworld);
     character.species = await getSpecies(character.species);
     return character;
-  });
-  console.log(characters);
-  // setCharacters(characters);
-  // setCharacterCount(characterCount);
+  }));
+
+  setCharacters(characters);
+  setCharacterCount(characterCount);
 };
 
 function App() {
