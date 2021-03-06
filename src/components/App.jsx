@@ -34,10 +34,6 @@ const getSpecies = async (speciesURL) => {
   return species.data.name;
 };
 
-const setURL = (setswURL, URL) => {
-  setswURL(URL);
-};
-
 const getCharacters = async (setCharacters, setCharacterCount, url) => {
   const responseData = await getCharacterInfo(url);
   const { characterCount, characterInfo } = responseData;
@@ -56,7 +52,6 @@ function App() {
   const [characters, setCharacters] = useState([]);
   const [characterCount, setCharacterCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [swURL, setswURL] = useState('https://swapi.dev/api/people/');
 
   useEffect(() => {
     getCharacters(setCharacters, setCharacterCount, 'https://swapi.dev/api/people/');
@@ -68,13 +63,20 @@ function App() {
 
   function handleSearchButtonClick(event) {
     event.preventDefault();
-    getCharacters(setCharacters, setCharacterCount, `https://swapi.dev/api/people/?search=${searchTerm}`);
+    const url = `https://swapi.dev/api/people/?search=${searchTerm}`;
+    getCharacters(setCharacters, setCharacterCount, url);
   }
 
-  // function handlePageButtonClick(event) {
-  //    //`https://swapi.dev/api/people/?page=${pageNumber}`
-  //   //`https://swapi.dev/api/people/?search=${searchTerm}&page=${pageNumber}`
-  // }
+  function handlePageButtonClick(event) {
+    const pageNumber = event.target.id;
+    if (searchTerm === '') {
+      const url = `https://swapi.dev/api/people/?page=${pageNumber}`;
+      getCharacters(setCharacters, setCharacterCount, url);
+    } else {
+      const url = `https://swapi.dev/api/people/?search=${searchTerm}&page=${pageNumber}`;
+      getCharacters(setCharacters, setCharacterCount, url);
+    }
+  }
 
   return (
     <div className="container app">
@@ -106,9 +108,7 @@ function App() {
             <div className="col-12">
               <Pagination
                 characterCount={characterCount}
-                swURL={swURL}
-                setswURL={setswURL}
-                setAPI={setURL}
+                click={handlePageButtonClick}
               />
             </div>
           </div>
