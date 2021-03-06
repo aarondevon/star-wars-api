@@ -58,21 +58,22 @@ const setURL = (setswURL, URL) => {
   setswURL(URL);
 };
 
+const getCharacters = async (setCharacters, setCharacterCount, swURL) => {
+  const responseData = await getCharacterInfo(swURL);
+  const { characterCount, characterInfo } = responseData;
+  await setHomeWorld(characterInfo);
+  await setSpecies(characterInfo);
+  setCharacters(characterInfo);
+  setCharacterCount(characterCount);
+};
+
 function App() {
   const [characters, setCharacters] = useState({});
   const [characterCount, setCharacterCount] = useState(0);
   const [swURL, setswURL] = useState('https://swapi.dev/api/people/');
 
   useEffect(() => {
-    const fetchData = async () => {
-      const responseData = await getCharacterInfo(swURL);
-      const { characterCount, characterInfo } = responseData;
-      await setHomeWorld(characterInfo);
-      await setSpecies(characterInfo);
-      setCharacters(characterInfo);
-      setCharacterCount(characterCount);
-    };
-    fetchData();
+    getCharacters(setCharacters, setCharacterCount, swURL);
   }, [swURL]);
 
   return (
