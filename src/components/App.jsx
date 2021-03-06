@@ -38,8 +38,8 @@ const setURL = (setswURL, URL) => {
   setswURL(URL);
 };
 
-const getCharacters = async (setCharacters, setCharacterCount, swURL) => {
-  const responseData = await getCharacterInfo(swURL);
+const getCharacters = async (setCharacters, setCharacterCount, url) => {
+  const responseData = await getCharacterInfo(url);
   const { characterCount, characterInfo } = responseData;
 
   const characters = await Promise.all(characterInfo.map(async (character) => {
@@ -53,13 +53,28 @@ const getCharacters = async (setCharacters, setCharacterCount, swURL) => {
 };
 
 function App() {
-  const [characters, setCharacters] = useState({});
+  const [characters, setCharacters] = useState([]);
   const [characterCount, setCharacterCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
   const [swURL, setswURL] = useState('https://swapi.dev/api/people/');
 
   useEffect(() => {
-    getCharacters(setCharacters, setCharacterCount, swURL);
-  }, [swURL]);
+    getCharacters(setCharacters, setCharacterCount, 'https://swapi.dev/api/people/');
+  }, []);
+
+  function handleSearchTermChange(event) {
+    setSearchTerm(event.target.value.trim());
+  }
+
+  function handleSearchButtonClick(event) {
+    event.preventDefault();
+    getCharacters(setCharacters, setCharacterCount, `https://swapi.dev/api/people/?search=${searchTerm}`);
+  }
+
+  // function handlePageButtonClick(event) {
+  //    //`https://swapi.dev/api/people/?page=${pageNumber}`
+  //   //`https://swapi.dev/api/people/?search=${searchTerm}&page=${pageNumber}`
+  // }
 
   return (
     <div className="container app">
@@ -73,7 +88,11 @@ function App() {
 
           <div className="row">
             <div className="col-12">
-              <Search setswURL={setswURL} setURL={setURL} />
+              <Search
+                search={handleSearchButtonClick}
+                change={handleSearchTermChange}
+                value={searchTerm}
+              />
             </div>
           </div>
 
