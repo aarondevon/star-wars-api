@@ -4,9 +4,9 @@ import Table from './Table';
 import Search from './Search';
 import Pagination from './Pagination';
 
-const httpToHttps = (url) => {
-  return url.replace('http', 'https');
-};
+// const httpToHttps = (url) => {
+//   return url.replace('http', 'https');
+// };
 
 const getCharacterInfo = async (swURL) => {
   let response;
@@ -22,7 +22,7 @@ const getCharacterInfo = async (swURL) => {
 };
 
 const getHomeworld = async (homeworldURL) => {
-  const homeworld = await axios.get(httpToHttps(homeworldURL));
+  const homeworld = await axios.get(homeworldURL);
   return homeworld.data.name;
 };
 
@@ -30,7 +30,7 @@ const getSpecies = async (speciesURL) => {
   if (speciesURL.length === 0) {
     return 'Human';
   }
-  const species = await axios.get(httpToHttps(speciesURL[0]));
+  const species = await axios.get(speciesURL[0]);
   return species.data.name;
 };
 
