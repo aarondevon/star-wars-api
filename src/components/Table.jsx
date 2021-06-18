@@ -18,7 +18,7 @@ function displayData(props) {
 
 function Table(props) {
   return (
-    <div>
+    <div className="table-responsive">
       <table id="data-table" className="table">
         <thead>
           <tr>
