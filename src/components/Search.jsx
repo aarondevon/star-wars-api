@@ -15,7 +15,6 @@ function Search(props) {
           value={props.value}
           onChange={props.change}
         />
-        {/* eslint-disable-next-line react/button-has-type */}
         <button className="btn btn-dark submit" type="submit" value="Search">Search</button>
       </form>
     </div>
